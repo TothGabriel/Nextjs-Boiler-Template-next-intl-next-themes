@@ -21,7 +21,7 @@ export function Providers({ children, locale, messages }: ProvidersProps) {
   }, []);
 
   if (!mounted) {
-    return null; // N'affiche rien tant que le composant n'est pas monté
+    return null; // Évite le rendu côté client tant que le composant n'est pas monté
   }
 
   return (

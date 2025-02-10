@@ -1,45 +1,30 @@
+// app/[locale]/layout.tsx
 import { Providers } from "@/app/providers";
-import { DEFAULT_LOCALE } from "@/app/config/i18n";
-import { ReactNode } from "react";
-import fs from "fs/promises";
-import path from "path";
-import {Navbar}  from '@/app/components/common/Navbar';
+import { notFound } from "next/navigation";
+import { Navbar } from "@/app/components/common/Navbar";
+import { routing } from "@/app/i18n/routing";
+import { setRequestLocale, getMessages } from "next-intl/server";
+import type { Locale } from "@/app/config/i18n";
 
-interface LocaleLayoutProps {
-  children: ReactNode;
-  params: Promise<{ locale: string; page?: string }>; // ✅ `params` est maintenant une `Promise`
-}
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: { locale: Locale };
+}) {
+  // Attendez explicitement les params avant de déstructurer
+  const { locale } = await Promise.resolve(params);
 
-/**
- * Charge le fichier de traduction pour un namespace donné (async).
- */
-async function loadNamespaceMessages(locale: string, namespace: string) {
-  try {
-    const filePath = path.join(process.cwd(), `public/locales/${locale}/${namespace}.json`);
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.warn(`⚠️ Fichier de traduction manquant: ${namespace}.json`);
-    return {};
+  if (!routing.locales.includes(locale)) {
+    notFound();
   }
-}
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
-  // ✅ Attendre `params` car c'est une `Promise`
-  const resolvedParams = await params;
-  const locale = resolvedParams?.locale || DEFAULT_LOCALE;
-  const pageNamespace = resolvedParams?.page || "home";
+  // Définit la locale pour la requête (ici, on passe seulement la locale en string)
+  setRequestLocale(locale);
 
-  // ✅ Charger les traductions de manière asynchrone
-  const globalMessages = await loadNamespaceMessages(locale, "global");
-  const pageMessages = await loadNamespaceMessages(locale, pageNamespace);
-
-  const messages = {
-    global: globalMessages,
-    [pageNamespace]: pageMessages,
-  };
-
-  console.log(`✅ Traductions chargées pour "${locale}" - Global et "${pageNamespace}":`, messages);
+  // Récupère les messages configurés via i18n/request.ts
+  const messages = await getMessages();
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -48,7 +33,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       </head>
       <body>
         <Providers locale={locale} messages={messages}>
-            <Navbar locale={locale}/>
+          <Navbar locale={locale} />
           {children}
         </Providers>
       </body>
@@ -56,11 +41,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   );
 }
 
-/**
- * Génère les routes statiques en fonction des langues et des pages.
- */
-export async function generateStaticParams() {
-  const locales = ["en", "fr"];
-  const pages = ["home", "about", "contact"]; // ✅ Détection automatique possible ici
-  return locales.flatMap((locale) => pages.map((page) => ({ locale, page })));
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
 }

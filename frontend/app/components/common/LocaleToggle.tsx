@@ -5,9 +5,10 @@ import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import { MenuItem, Select, FormControl, InputLabel, Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image'; // ✅ Utilisation de `next/image` pour éviter les problèmes
 
 const flagIcons: Record<string, string> = {
-  en: '/flags/en.png', // Assurez-vous que ces fichiers existent dans public/flags/
+  en: '/flags/en.png', // ✅ Chemin relatif correct
   fr: '/flags/fr.png'
 };
 
@@ -51,8 +52,9 @@ export default function LocaleToggle() {
         {Object.entries(flagIcons).map(([lang, flagSrc]) => (
           <MenuItem key={lang} value={lang}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <img src={flagSrc} alt={`${lang} flag`} width={24} height={16} />
-              <Typography>{lang === 'en' ? t('english') : t('french')}</Typography>
+              {/* ✅ Utilisation de `next/image` pour éviter les erreurs */}
+              <Image src={flagSrc} alt={`${lang} flag`} width={24} height={16} />
+              <Typography>{t(lang === 'en' ? 'english' : 'french')}</Typography>
             </Box>
           </MenuItem>
         ))}

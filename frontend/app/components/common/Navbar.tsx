@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { lightTheme, darkTheme } from "@/app/config/theme";
-import LocaleToggle from "@/app/components/LocaleToggle";
-import ThemeToggle from "@/app/components/ThemeToggle";
+import LocaleToggle from "@/app/components/common/LocaleToggle";
+import ThemeToggle from "@/app/components/common/ThemeToggle";
 
 interface NavbarProps {
   locale: string; // ✅ Passé en prop depuis `layout.tsx`

@@ -1,25 +1,20 @@
-import { ThemeOptions } from '@mui/material/styles';
+// app/config/theme.ts
+import { createTheme } from '@mui/material/styles';
 
-export const lightThemeOptions: ThemeOptions = {
+export const lightTheme = createTheme({
   palette: {
     mode: 'light',
-    primary: {
-      main: '#1976d2',
-    },
-    background: {
-      default: '#ffffff',
-    },
+    primary: { main: '#1976d2' },
+    background: { default: '#ffffff' },
   },
-};
+  // Ajoutez d’autres options si nécessaire
+});
 
-export const darkThemeOptions: ThemeOptions = {
+export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
-    primary: {
-      main: '#90caf9',
-    },
-    background: {
-      default: '#121212',
-    },
+    primary: { main: '#90caf9' },
+    background: { default: '#121212' },
   },
-};
+  // Ajoutez d’autres options si nécessaire
+});

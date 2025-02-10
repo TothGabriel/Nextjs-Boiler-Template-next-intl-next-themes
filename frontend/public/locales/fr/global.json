@@ -1,0 +1,18 @@
+{
+  "welcome": "Bienvenue sur mon application !",
+  "language": "Langue",
+  "theme": "Thème",
+  "darkMode": "Mode sombre",
+  "lightMode": "Mode clair",
+  "toggleTheme": "Passer en {theme}",
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "locale": {
+    "languageLabel": "Langue",
+    "english": "Anglais",
+    "french": "Français"
+  }
+}
